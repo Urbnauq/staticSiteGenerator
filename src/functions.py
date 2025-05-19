@@ -56,9 +56,9 @@ def extract_markdown_images(text):
 
 def extract_markdown_links(text):
     matches = re.findall(r"\[.*?\]\(.*?\)", text)
-    images = []
+    links = []
     for match in matches:
         alt = re.findall(r"\[(.*?)\]", match)[0]
         link = re.findall(r"\((.*?)\)", match)[0]
-        images.append((alt, link))
-    return images
+        links.append((alt, link))
+    return links
