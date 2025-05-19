@@ -1,4 +1,6 @@
 from textnode import TextNode, TextType
+from functions import split_nodes_delimiter
+
 
 def main():
 
