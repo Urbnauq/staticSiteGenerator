@@ -62,3 +62,78 @@ def extract_markdown_links(text):
         link = re.findall(r"\((.*?)\)", match)[0]
         links.append((alt, link))
     return links
+
+# Split_nodes_images-------------------------------------------------------------------------------
+def split_nodes_image(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        images = extract_markdown_images(node.text)
+        original_text = node.text
+
+        if images == None:
+            new_nodes.append(node)
+            continue
+
+        if original_text == "":
+            continue
+        
+        for image in images:
+            image_alt = image[0]
+            image_link = image[1]
+            
+            sections = original_text.split(f"![{image_alt}]({image_link})", 1)
+
+            if len(sections) != 2:
+                raise ValueError("Invalid image markdown")
+            
+            original_text = sections[1]
+
+            if sections[-1] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            elif sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            
+            new_nodes.append(TextNode(image_alt, TextType.IMAGE, image_link))
+    
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, TextType.TEXT))
+
+    return new_nodes
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        links = extract_markdown_links(node.text)
+        original_text = node.text
+
+        if links == None:
+            new_nodes.append(node)
+            continue
+
+        if original_text == "":
+            continue
+        
+        for link in links:
+            alt = link[0]
+            link_ = link[1]
+            
+            sections = original_text.split(f"[{alt}]({link_})", 1)
+
+            if len(sections) != 2:
+                raise ValueError("Invalid link markdown")
+            
+            original_text = sections[1]
+
+            if sections[-1] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            elif sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            
+            new_nodes.append(TextNode(alt, TextType.LINK, link_))
+    
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, TextType.TEXT))
+
+    return new_nodes
