@@ -1,4 +1,4 @@
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, DELIMITERS
 from htmlnode import LeafNode
 import re
 
@@ -63,7 +63,7 @@ def extract_markdown_links(text):
         links.append((alt, link))
     return links
 
-# Split_nodes_images-------------------------------------------------------------------------------
+# Split_nodes_images & Split_nodes_links-------------------------------------------------------------------------------
 def split_nodes_image(old_nodes):
     new_nodes = []
 
@@ -71,7 +71,7 @@ def split_nodes_image(old_nodes):
         images = extract_markdown_images(node.text)
         original_text = node.text
 
-        if images == None:
+        if images == []:
             new_nodes.append(node)
             continue
 
@@ -108,7 +108,7 @@ def split_nodes_link(old_nodes):
         links = extract_markdown_links(node.text)
         original_text = node.text
 
-        if links == None:
+        if links == []:
             new_nodes.append(node)
             continue
 
@@ -137,3 +137,16 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, TextType.TEXT))
 
     return new_nodes
+
+# Text_to_textnodes-------------------------------------------------------------------------------
+def text_to_textnodes(text):
+    split_nodes_image_and_link = [split_nodes_image, split_nodes_link]
+    nodes = [TextNode(text, TextType.TEXT)]
+
+    for delimiter in DELIMITERS:
+        nodes = split_nodes_delimiter(nodes, DELIMITERS[delimiter], delimiter)
+
+    for split_node in split_nodes_image_and_link:
+        nodes = split_node(nodes)    
+    
+    return nodes
