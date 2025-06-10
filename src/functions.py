@@ -89,9 +89,7 @@ def split_nodes_image(old_nodes):
             
             original_text = sections[1]
 
-            if sections[-1] != "":
-                new_nodes.append(TextNode(sections[0], TextType.TEXT))
-            elif sections[0] != "":
+            if sections[0] != "":
                 new_nodes.append(TextNode(sections[0], TextType.TEXT))
             
             new_nodes.append(TextNode(image_alt, TextType.IMAGE, image_link))
@@ -120,15 +118,13 @@ def split_nodes_link(old_nodes):
             link_ = link[1]
             
             sections = original_text.split(f"[{alt}]({link_})", 1)
-
+            
             if len(sections) != 2:
                 raise ValueError("Invalid link markdown")
             
             original_text = sections[1]
-
-            if sections[-1] != "":
-                new_nodes.append(TextNode(sections[0], TextType.TEXT))
-            elif sections[0] != "":
+            
+            if sections[0] != "":
                 new_nodes.append(TextNode(sections[0], TextType.TEXT))
             
             new_nodes.append(TextNode(alt, TextType.LINK, link_))
@@ -140,13 +136,26 @@ def split_nodes_link(old_nodes):
 
 # Text_to_textnodes-------------------------------------------------------------------------------
 def text_to_textnodes(text):
-    split_nodes_image_and_link = [split_nodes_image, split_nodes_link]
     nodes = [TextNode(text, TextType.TEXT)]
 
     for delimiter in DELIMITERS:
         nodes = split_nodes_delimiter(nodes, DELIMITERS[delimiter], delimiter)
 
+    split_nodes_image_and_link = [split_nodes_image, split_nodes_link]
     for split_node in split_nodes_image_and_link:
-        nodes = split_node(nodes)    
+        nodes = split_node(nodes)
     
     return nodes
+
+# Markdown_to_blocks-------------------------------------------------------------------------------
+def markdown_to_blocks(markdown):
+    md = markdown.split("\n\n")
+    blocks = []
+    
+    for i in range(len(md)):
+        if md[i] == "":
+            continue
+        else:
+            blocks.append(md[i].strip())
+        
+    return blocks
