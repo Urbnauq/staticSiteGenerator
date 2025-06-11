@@ -171,7 +171,8 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered_list"
 
 def block_to_block_type(blk):
-    blocks = markdown_to_blocks(blk)
+    blocks = markdown_to_blocks(blk) # remove this when done.
+    print(blocks)
     headings = {
         "#" : "#",
         "##" : "##",
@@ -182,10 +183,17 @@ def block_to_block_type(blk):
     }
 
     for block in blocks:
-        print(block[:6])
-        if block.startswith("#"):
+        if (block.startswith("#")):
             heading = block.split(" ", maxsplit=1)[0]
             if headings.get(heading):
                 print(BlockType.HEADING)
             else:
                 print(BlockType.PARAGRAPH)
+        if (block[:3] == "```" and block[-3:] == "```" ):
+            print(BlockType.CODE)
+        if block.startswith(">"):
+            print(BlockType.QUOTE)
+        if block[:2] == "- ":
+            print(BlockType.UNORDERED_LIST)
+        # Complete the ordered list
+

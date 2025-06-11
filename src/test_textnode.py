@@ -304,14 +304,27 @@ This is the same paragraph on a new line
     def test_block_to_block_type(self):
         md = """
 # This is **bolded** paragraph
-
 ###### Heading level 6
 
 ##### Heading level 5
 
-#### Heading level 4
+####Heading level 4
 
-####### Heading level 2
+### Heading level 2
+
+```code```
+
+``code``
+
+>hello
+
+> Goodbye
+
+hello
+
+- Almonte
+
+-Almonte
 
 This is another paragraph with _italic_ text and `code` here
 This is the same paragraph on a new line
