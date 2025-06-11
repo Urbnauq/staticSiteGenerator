@@ -1,6 +1,7 @@
 from textnode import TextNode, TextType, DELIMITERS
 from htmlnode import LeafNode
 import re
+from enum import Enum
 
 def text_node_to_html_node(text_node):
     if text_node.text_type == TextType.TEXT:
@@ -159,3 +160,32 @@ def markdown_to_blocks(markdown):
             blocks.append(md[i].strip())
         
     return blocks
+
+# Block_to_block_type-------------------------------------------------------------------------------
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    UNORDERED_LIST = "unordered_list"
+    ORDERED_LIST = "ordered_list"
+
+def block_to_block_type(blk):
+    blocks = markdown_to_blocks(blk)
+    headings = {
+        "#" : "#",
+        "##" : "##",
+        "###" : "###",
+        "####" : "####",
+        "#####" : "#####",
+        "######" : "######"
+    }
+
+    for block in blocks:
+        print(block[:6])
+        if block.startswith("#"):
+            heading = block.split(" ", maxsplit=1)[0]
+            if headings.get(heading):
+                print(BlockType.HEADING)
+            else:
+                print(BlockType.PARAGRAPH)

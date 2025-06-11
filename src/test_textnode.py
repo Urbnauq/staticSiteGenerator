@@ -10,6 +10,7 @@ from functions import (
     split_nodes_link,
     text_to_textnodes,
     markdown_to_blocks,
+    block_to_block_type,
     )
 
 class TestTextNode(unittest.TestCase):
@@ -299,6 +300,27 @@ This is the same paragraph on a new line
             ],
         )
 
+# Block_to_block_type----------------------------------------------------------------------------------------------------------------------
+    def test_block_to_block_type(self):
+        md = """
+# This is **bolded** paragraph
 
-if __name__ == "__main__":
-    unittest.main()
+###### Heading level 6
+
+##### Heading level 5
+
+#### Heading level 4
+
+####### Heading level 2
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+        blocks = block_to_block_type(md)
+        print(blocks)
+
+    if __name__ == "__main__":
+        unittest.main()
