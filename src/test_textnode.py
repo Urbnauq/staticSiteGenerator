@@ -1,6 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType, DELIMITERS
+
 from functions import (
     text_node_to_html_node, 
     split_nodes_delimiter,
@@ -11,6 +12,7 @@ from functions import (
     text_to_textnodes,
     markdown_to_blocks,
     block_to_block_type,
+    BlockType
     )
 
 class TestTextNode(unittest.TestCase):
@@ -301,39 +303,68 @@ This is the same paragraph on a new line
         )
 
 # Block_to_block_type----------------------------------------------------------------------------------------------------------------------
-    def test_block_to_block_type(self):
-        md = """
-# This is **bolded** paragraph
-###### Heading level 6
+#     def test_block_to_block_type(self):
+#         md = """
+# # This is **bolded** paragraph
+# ###### Heading level 6
 
-##### Heading level 5
+# ##### Heading level 5
 
-####Heading level 4
+# ####Heading level 4
 
-### Heading level 2
+# ### Heading level 2
 
-```code```
+# ```code```
 
-``code``
+# ``code``
 
->hello
+# >hello
 
-> Goodbye
+# > Goodbye
 
-hello
+# hello
 
-- Almonte
+# - Almonte
 
--Almonte
+# -Almonte
 
-This is another paragraph with _italic_ text and `code` here
-This is the same paragraph on a new line
+# This is another paragraph with _italic_ text and `code` here
+# This is the same paragraph on a new line
 
-- This is a list
-- with items
-"""
-        blocks = block_to_block_type(md)
-        print(blocks)
+# - This is a list
+# ```code```
+# - with items
 
-    if __name__ == "__main__":
-        unittest.main()
+# 1. Item 1
+# hello
+# 2. Item 2
+# 3. Item 3
+# 5. Item 5
+
+# 1. Item 1
+# """
+#         blks = markdown_to_blocks(md)
+#         print(blks)
+#         for blck in blks:
+#             block_splited = blck.split("\n")
+#             for block in block_splited:
+#                 blocks = block_to_block_type(block)
+#                 print(blocks)
+
+    def test_block_to_block_types(self):
+        block = "# heading"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+        block = "```\ncode\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
+        block = "> quote\n> more quote"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+        block = "- list\n- items"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
+        block = "1. list\n2. items"
+        self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
+        block = "paragraph"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+
+if __name__ == "__main__":
+    unittest.main()

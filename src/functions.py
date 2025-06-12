@@ -170,9 +170,7 @@ class BlockType(Enum):
     UNORDERED_LIST = "unordered_list"
     ORDERED_LIST = "ordered_list"
 
-def block_to_block_type(blk):
-    blocks = markdown_to_blocks(blk) # remove this when done.
-    print(blocks)
+def block_to_block_type(block):
     headings = {
         "#" : "#",
         "##" : "##",
@@ -182,18 +180,37 @@ def block_to_block_type(blk):
         "######" : "######"
     }
 
-    for block in blocks:
-        if (block.startswith("#")):
-            heading = block.split(" ", maxsplit=1)[0]
-            if headings.get(heading):
-                print(BlockType.HEADING)
-            else:
-                print(BlockType.PARAGRAPH)
-        if (block[:3] == "```" and block[-3:] == "```" ):
-            print(BlockType.CODE)
-        if block.startswith(">"):
-            print(BlockType.QUOTE)
-        if block[:2] == "- ":
-            print(BlockType.UNORDERED_LIST)
-        # Complete the ordered list
+    lines = block.split("\n")
+
+    if (block.startswith("#")):
+        heading = block.split(" ", maxsplit=1)[0]
+        if (headings.get(heading)):
+            return BlockType.HEADING
+        else:
+            return BlockType.PARAGRAPH
+    
+    if (block[:3] == "```" and block[-3:] == "```" ):
+        return BlockType.CODE
+    
+    if (block[:1] == ">"):
+        for line in lines:
+            if (line[:1] != ">"):
+                return BlockType.PARAGRAPH
+        return BlockType.QUOTE
+    
+    if (block[:2] == "- "):
+        for line in lines:
+            if (line[:2] !=  "- "):
+                return BlockType.PARAGRAPH    
+        return BlockType.UNORDERED_LIST
+    
+    if (block[:3] == "1. "):
+        i = 1
+        for line in lines:
+            if (line[:3] != f"{i}. "):
+                return BlockType.PARAGRAPH
+            i += 1
+        return BlockType.ORDERED_LIST
+    
+    return BlockType.PARAGRAPH
 
