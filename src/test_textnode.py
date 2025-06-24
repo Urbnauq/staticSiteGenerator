@@ -381,6 +381,14 @@ This is another paragraph with _italic_ text and `code` here
 
 ### This is a test to see if the headings are working correctly.
 
+####### YUY
+
+####fff
+
+# This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)
+
+# This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)
+
 """
 
         node = markdown_to_html_node(md)

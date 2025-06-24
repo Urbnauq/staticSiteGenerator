@@ -258,6 +258,9 @@ def heading_tag(text):
         }
     
     heading = text.split(" ", maxsplit=1)
-    return heading_dic.get(heading[0]), heading[1]
+    
+    if heading_dic.get(heading[0]):
+        return heading_dic.get(heading[0]), heading[1]
+    return text
     
     
