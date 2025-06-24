@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType, DELIMITERS
-from htmlnode import LeafNode
+from htmlnode import HTMLNode, ParentNode, LeafNode
 import re
 from enum import Enum
 
@@ -214,3 +214,50 @@ def block_to_block_type(block):
     
     return BlockType.PARAGRAPH
 
+# Markdown_to_HTML_Node-------------------------------------------------------------------------------
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    children = []
+    for block in blocks:
+        block_type = block_to_block_type(block)
+        block_to_html = block_to_html_node(block, block_type)
+        children.append(block_to_html)
+        
+    node_html = ParentNode("div", children, None)
+    return node_html
+
+    # Helpers---------------------------
+def block_to_html_node(text, block_type):
+    block_type_dic = {
+        BlockType.PARAGRAPH : ParentNode("p", text_to_children(text.replace("\n", " "))),
+        BlockType.HEADING : ParentNode(heading_tag(text)[0], text_to_children(heading_tag(text)[1].replace("\n", " "))),
+        BlockType.CODE : BlockType.CODE,
+        BlockType.QUOTE : BlockType.QUOTE,
+        BlockType.UNORDERED_LIST : BlockType.UNORDERED_LIST,
+        BlockType.ORDERED_LIST : BlockType.ORDERED_LIST,
+    }
+
+    return block_type_dic[block_type]
+
+def text_to_children(text):
+    text_nodes = text_to_textnodes(text)
+    children = []
+    for node in text_nodes:
+        children.append(text_node_to_html_node(node))
+    return children
+
+def heading_tag(text):
+    heading_dic = {
+        "#" : "h1",
+        "##" : "h2",
+        "###" : "h3",
+        "####" : "h4",
+        "#####" : "h5",
+        "######" : "h6"
+        }
+    
+    heading = text.split(" ", maxsplit=1)
+    return heading_dic.get(heading[0]), heading[1]
+    
+    
