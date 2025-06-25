@@ -236,11 +236,12 @@ def block_to_html_node(text, block_type):
     if block_type == BlockType.CODE: 
         return ParentNode("pre", [ParentNode("code", [text_node_to_html_node(TextNode(code_text(text), TextType.TEXT))])])
     if block_type == BlockType.QUOTE:
-        return ParentNode("blockquote", text_to_children(text.replace(">", "").lstrip(" ")))
+        return ParentNode("blockquote", text_to_children(text.replace(">", "").replace("\n", "").lstrip(" ")))
     if block_type == BlockType.UNORDERED_LIST:
         return ParentNode("ul", unordered_list(text))
     if BlockType.ORDERED_LIST:
         return ParentNode("ol", ordered_list(text))
+    raise ValueError("invalid block type")
 
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
@@ -270,7 +271,6 @@ def code_text(text):
 
 def unordered_list(text):
     unordered_split = text.split("\n")
-    print(unordered_split)
     parents = []
     for lst in unordered_split:
         if lst == "":
