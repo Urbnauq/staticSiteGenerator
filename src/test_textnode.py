@@ -394,9 +394,9 @@ This is text that _should_ remain
 the **same** even with inline stuff
 ```
 
-- A
-- b
-- c
+- Chase
+- Captial One
+- Paypal
 
 """
 

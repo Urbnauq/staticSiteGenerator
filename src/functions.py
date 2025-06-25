@@ -238,8 +238,7 @@ def block_to_html_node(text, block_type):
     if block_type == BlockType.QUOTE:
         return ParentNode("blockquote", text_to_children(text.replace(">", "").lstrip(" ")))
     if block_type == BlockType.UNORDERED_LIST:
-        parents = unordered_list(text) 
-        return ParentNode("ul", parents)
+        return ParentNode("ul", unordered_list(text))
     if BlockType.ORDERED_LIST:
         return BlockType.ORDERED_LIST
 
@@ -269,7 +268,7 @@ def heading_tag(text):
 def code_text(text):
     return text.replace("```", "").lstrip("\n")
 
-def unordered_list(text):
+def unordered_list(text): # Make compatible with ordered list
     unordered_split = text.split("-")
     parents = []
     for lst in unordered_split:
