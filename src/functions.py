@@ -235,10 +235,11 @@ def block_to_html_node(text, block_type):
         return ParentNode(heading_tag(text)[0], text_to_children(heading_tag(text)[1].replace("\n", " ")))
     if block_type == BlockType.CODE: 
         return ParentNode("pre", [ParentNode("code", [text_node_to_html_node(TextNode(code_text(text), TextType.TEXT))])])
-    if block_type == BlockType.QUOTE: 
-        return BlockType.QUOTE
-    if block_type == BlockType.UNORDERED_LIST: 
-        return BlockType.UNORDERED_LIST
+    if block_type == BlockType.QUOTE:
+        return ParentNode("blockquote", text_to_children(text.replace(">", "").lstrip(" ")))
+    if block_type == BlockType.UNORDERED_LIST:
+        parents = unordered_list(text) 
+        return ParentNode("ul", parents)
     if BlockType.ORDERED_LIST:
         return BlockType.ORDERED_LIST
 
@@ -268,5 +269,14 @@ def heading_tag(text):
 def code_text(text):
     return text.replace("```", "").lstrip("\n")
 
+def unordered_list(text):
+    unordered_split = text.split("-")
+    parents = []
+    for lst in unordered_split:
+        if lst == "":
+            continue
+        text_formated = lst.replace("\n", "").lstrip(" ")
+        parents.append(ParentNode("li", text_to_children(text_formated)))
+    return parents
     
     

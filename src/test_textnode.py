@@ -394,6 +394,10 @@ This is text that _should_ remain
 the **same** even with inline stuff
 ```
 
+- A
+- b
+- c
+
 """
 
         node = markdown_to_html_node(md)
