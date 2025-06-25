@@ -398,6 +398,10 @@ the **same** even with inline stuff
 - Captial One
 - Paypal
 
+1. Ed
+2. Edd
+3. Eddy
+
 """
 
         node = markdown_to_html_node(md)

@@ -240,7 +240,7 @@ def block_to_html_node(text, block_type):
     if block_type == BlockType.UNORDERED_LIST:
         return ParentNode("ul", unordered_list(text))
     if BlockType.ORDERED_LIST:
-        return BlockType.ORDERED_LIST
+        return ParentNode("ol", ordered_list(text))
 
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
@@ -268,14 +268,24 @@ def heading_tag(text):
 def code_text(text):
     return text.replace("```", "").lstrip("\n")
 
-def unordered_list(text): # Make compatible with ordered list
-    unordered_split = text.split("-")
+def unordered_list(text):
+    unordered_split = text.split("\n")
+    print(unordered_split)
     parents = []
     for lst in unordered_split:
         if lst == "":
             continue
-        text_formated = lst.replace("\n", "").lstrip(" ")
+        text_formated = lst.replace("-", "").lstrip(" ")
         parents.append(ParentNode("li", text_to_children(text_formated)))
     return parents
-    
+
+def ordered_list(text):
+    ordered_split = text.split("\n")
+    parents = []
+    for lst in ordered_split:
+        if lst == "":
+            continue
+        text_formated = lst.replace(lst[:2], "").lstrip(" ")
+        parents.append(ParentNode("li", text_to_children(text_formated)))
+    return parents
     
