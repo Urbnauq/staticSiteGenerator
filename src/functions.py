@@ -229,16 +229,18 @@ def markdown_to_html_node(markdown):
 
     # Helpers---------------------------
 def block_to_html_node(text, block_type):
-    block_type_dic = {
-        BlockType.PARAGRAPH : ParentNode("p", text_to_children(text.replace("\n", " "))),
-        BlockType.HEADING : ParentNode(heading_tag(text)[0], text_to_children(heading_tag(text)[1].replace("\n", " "))),
-        BlockType.CODE : BlockType.CODE,
-        BlockType.QUOTE : BlockType.QUOTE,
-        BlockType.UNORDERED_LIST : BlockType.UNORDERED_LIST,
-        BlockType.ORDERED_LIST : BlockType.ORDERED_LIST,
-    }
-
-    return block_type_dic[block_type]
+    if block_type == BlockType.PARAGRAPH: 
+        return ParentNode("p", text_to_children(text.replace("\n", " ")))
+    if block_type == BlockType.HEADING: 
+        return ParentNode(heading_tag(text)[0], text_to_children(heading_tag(text)[1].replace("\n", " ")))
+    if block_type == BlockType.CODE: 
+        return ParentNode("pre", [ParentNode("code", [text_node_to_html_node(TextNode(code_text(text), TextType.TEXT))])])
+    if block_type == BlockType.QUOTE: 
+        return BlockType.QUOTE
+    if block_type == BlockType.UNORDERED_LIST: 
+        return BlockType.UNORDERED_LIST
+    if BlockType.ORDERED_LIST:
+        return BlockType.ORDERED_LIST
 
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
@@ -262,5 +264,9 @@ def heading_tag(text):
     if heading_dic.get(heading[0]):
         return heading_dic.get(heading[0]), heading[1]
     return text
+
+def code_text(text):
+    return text.replace("```", "").lstrip("\n")
+
     
     
