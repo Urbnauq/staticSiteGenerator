@@ -13,6 +13,7 @@ from functions import (
     markdown_to_blocks,
     block_to_block_type,
     markdown_to_html_node,
+    extract_title,
     BlockType
     )
 
@@ -545,6 +546,22 @@ this is paragraph text
             html,
             "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
         )
+
+# Extract_title---------------------------------------------------------------------------------------------------------------------
+    def test_extract_title(self):
+        md = """
+## Yo
+
+## Eduardo Almonte
+
+## Hello
+
+# This is the only heading 
+"""
+
+        h1 = extract_title(md)
+        print(h1)
+        # self.assertEqual(h1, "Hello")
 
 if __name__ == "__main__":
     unittest.main()

@@ -311,3 +311,18 @@ def copy_directories(source, target):
             shutil.copy(os.path.join(source, dr_files), os.path.join(target, dr_files))
         else:
             copy_directories(os.path.join(source, dr_files), os.path.join(target, dr_files))
+
+# Generate and server the webpage -----------------------------------------------------
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        if (line.startswith("#")) and (line.split(" ", maxsplit=1)[0] == "#"):
+            h1_text = line.split(" ", maxsplit=1)[1]
+            return h1_text
+    
+    raise ValueError("Include h1 heading.")
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    markdown = open(from_path, "r").read()
+    print(markdown)
