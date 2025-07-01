@@ -2,6 +2,8 @@ from textnode import TextNode, TextType, DELIMITERS
 from htmlnode import HTMLNode, ParentNode, LeafNode
 import re
 from enum import Enum
+import os
+import shutil
 
 def text_node_to_html_node(text_node):
     if text_node.text_type == TextType.TEXT:
@@ -289,3 +291,23 @@ def ordered_list(text):
         parents.append(ParentNode("li", text_to_children(text_formated)))
     return parents
     
+# Function to copy all contents from a source directory to a destination directory------------------------------------------------------------------------------------
+def copy_directories(source, target):
+    static_directory = os.listdir(source)
+
+    if not os.path.exists(target):
+        os.mkdir(target)
+    else:
+        for name in os.listdir(target):
+            path = os.path.join(target, name)
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
+    
+    for dr_files in static_directory:
+        if os.path.isfile(os.path.join(source, dr_files)):
+            print(f"Copying {os.path.join(source, dr_files)} -----> {os.path.join(target, dr_files)}")
+            shutil.copy(os.path.join(source, dr_files), os.path.join(target, dr_files))
+        else:
+            copy_directories(os.path.join(source, dr_files), os.path.join(target, dr_files))

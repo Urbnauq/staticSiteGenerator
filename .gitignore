@@ -173,5 +173,10 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Project ignore files
+
 # __pycache__/
 __pycache__/
+
+# public/
+public/
