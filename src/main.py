@@ -1,12 +1,8 @@
-from textnode import TextNode, TextType
-from functions import split_nodes_delimiter, copy_directories, generate_page_recursive
-import os
-
+from functions import copy_directories, generate_page_recursive
+import sys
 
 def main():
-
-    # text_node_0 = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    # print(text_node_0)
+    print(sys.argv)
 
     source = "static"
     target = "public"
