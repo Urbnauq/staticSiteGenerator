@@ -2,7 +2,7 @@ from functions import copy_directories, generate_page_recursive
 import sys
 
 def main():
-    base_path = sys.argv[0]
+    base_path = "/"
 
     source = "static"
     target = "docs"
