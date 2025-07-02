@@ -178,5 +178,5 @@ cython_debug/
 # __pycache__/
 __pycache__/
 
-# public/
-public/
+# docs/
+docs/
