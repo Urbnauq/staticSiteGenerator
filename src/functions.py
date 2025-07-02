@@ -322,7 +322,35 @@ def extract_title(markdown):
     
     raise ValueError("Include h1 heading.")
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page_recursive(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    markdown = open(from_path, "r").read()
-    print(markdown)
+    
+    dir_contents = os.listdir(from_path)
+
+    for file_dir in dir_contents:
+        if os.path.isfile(os.path.join(from_path, file_dir)):
+            print(file_dir)
+            markdown_file = open(os.path.join(from_path, file_dir), "r")
+            markdown = markdown_file.read()
+            markdown_file.close()
+
+            template_file = open(template_path, "r")
+            template = template_file.read()
+            template_file.close()
+
+            markdown_title = extract_title(markdown)
+            md_to_html_node = markdown_to_html_node(markdown)
+            html = md_to_html_node.to_html()
+            
+            template = template.replace("{{ Title }}", markdown_title).replace("{{ Content }}", html)
+
+            with open(os.path.join(dest_path, f"{file_dir.split('.')[0]}.html"), "w") as file:
+                file.write(template)
+            file.close()
+        else:
+            os.mkdir(os.path.join(dest_path, file_dir))
+            generate_page_recursive(os.path.join(from_path, file_dir), template_path, os.path.join(dest_path, file_dir))
+        
+        
+    
+    

@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
-from functions import split_nodes_delimiter, copy_directories, generate_page
+from functions import split_nodes_delimiter, copy_directories, generate_page_recursive
+import os
 
 
 def main():
@@ -11,11 +12,10 @@ def main():
     target = "public"
     copy_directories(source, target)
     
-    from_path = "content/index.md"
+    from_path = "content"
     template_path = "template.html"
-    dest_path = None
-    generate_page(from_path, template_path, dest_path)
+    dest_path = "public"
+    generate_page_recursive(from_path, template_path, dest_path)
 
-    # Checkpoint - CH3:L5
 if __name__ == "__main__":
     main()
