@@ -322,7 +322,7 @@ def extract_title(markdown):
     
     raise ValueError("Include h1 heading.")
 
-def generate_page_recursive(base_path, from_path, template_path, dest_path):
+def generate_page_recursive(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
     dir_contents = os.listdir(from_path)
@@ -343,7 +343,7 @@ def generate_page_recursive(base_path, from_path, template_path, dest_path):
             html = md_to_html_node.to_html()
             
             template = template.replace("{{ Title }}", markdown_title).replace("{{ Content }}", html)
-            template = template.replace('href="/', f'href="{base_path}/').replace('src="/', f'href="{base_path}/')
+            # template = template.replace('href="/', f'href="{base_path}/').replace('src="/', f'href="{base_path}/')
             print(template)
             
             with open(os.path.join(dest_path, f"{file_dir.split('.')[0]}.html"), "w") as file:
@@ -351,7 +351,7 @@ def generate_page_recursive(base_path, from_path, template_path, dest_path):
             file.close()
         else:
             os.mkdir(os.path.join(dest_path, file_dir))
-            generate_page_recursive(base_path, os.path.join(from_path, file_dir), template_path, os.path.join(dest_path, file_dir))
+            generate_page_recursive(os.path.join(from_path, file_dir), template_path, os.path.join(dest_path, file_dir))
         
         
     
