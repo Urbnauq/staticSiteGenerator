@@ -3,7 +3,7 @@ import sys
 
 def main():
     base_path = sys.argv[1]
-    
+
     source = "static"
     target = "docs"
     copy_directories(source, target)
